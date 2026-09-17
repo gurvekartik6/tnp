@@ -23,6 +23,7 @@ import {
   type DepartmentStat,
   type CampusDepartment,
   type CampusLab,
+  type HeroSlide,
 } from "../../../services/siteContent";
 import { api } from "../../../services/api";
 import {
@@ -44,6 +45,7 @@ type Tab =
   | "news"
   | "newsletter"
   | "calendar"
+  | "placementPhotos"
   | "media";
 const tabs: [Tab, string][] = [
   ["home", "Home banner & KPIs"],
@@ -58,6 +60,7 @@ const tabs: [Tab, string][] = [
   ["news", "Announcements"],
   ["newsletter", "Newsletter"],
   ["calendar", "Calendar"],
+  ["placementPhotos", "Placement Photos"],
   ["media", "Media"],
 ];
 
@@ -213,6 +216,14 @@ export default function DeanCMS({
         )}{" "}
         {tab === "calendar" && (
           <CalendarEditor content={content} publish={publish} />
+        )}{" "}
+        {tab === "placementPhotos" && (
+          <PlacementPhotosEditor
+            content={content}
+            publish={publish}
+            upload={upload}
+            uploading={uploading}
+          />
         )}{" "}
         {tab === "media" && (
           <MediaEditor
@@ -1774,6 +1785,148 @@ function CalendarEditor({
             </button>
           </div>
         ))}
+      </div>
+    </EditorCard>
+  );
+}
+function PlacementPhotosEditor({
+  content,
+  publish,
+  upload,
+  uploading,
+}: {
+  content: PublicHomeContent;
+  publish: (p: Partial<PublicHomeContent>) => void;
+  upload: (f: File, cb: (u: string) => void, folder: string) => void;
+  uploading: boolean;
+}) {
+  const [rows, setRows] = useState<HeroSlide[]>(
+    Array.isArray(content.heroSlides) ? content.heroSlides : [],
+  );
+  useEffect(
+    () => setRows(Array.isArray(content.heroSlides) ? content.heroSlides : []),
+    [content.heroSlides],
+  );
+  const update = (index: number, patch: Partial<HeroSlide>) =>
+    setRows((current) =>
+      current.map((row, i) => (i === index ? { ...row, ...patch } : row)),
+    );
+  const add = () =>
+    setRows((current) => [
+      {
+        id: `slide-${Date.now()}`,
+        image: "",
+        title: "New placement",
+        subtitle: "",
+        batch: "2026–27",
+      },
+      ...current,
+    ]);
+  return (
+    <EditorCard
+      title="Homepage placement photos"
+      action={
+        <>
+          <button className="btn-secondary" onClick={add}>
+            <Plus size={14} /> Add placement
+          </button>
+          <button
+            className="btn-primary"
+            onClick={() => publish({ heroSlides: rows })}
+          >
+            <Save size={15} /> Publish photos
+          </button>
+        </>
+      }
+    >
+      <p className="section-subtitle">
+        These images power the placement highlights slider on the public
+        homepage. Upload a photo, add the company/role and student names, then
+        publish.
+      </p>
+      <div className="cms-placement-list">
+        {rows.map((row, i) => (
+          <article className="cms-placement-card" key={row.id}>
+            <div className="cms-placement-preview">
+              {row.image ? (
+                <img src={row.image} alt={row.title || "Placement highlight"} />
+              ) : (
+                <ImagePlus size={28} />
+              )}
+            </div>
+            <div className="cms-placement-fields">
+              <label>
+                Company / role
+                <input
+                  value={row.title}
+                  onChange={(e) => update(i, { title: e.target.value })}
+                  placeholder="TCS · Ninja Role"
+                />
+              </label>
+              <label>
+                Students
+                <input
+                  value={row.subtitle}
+                  onChange={(e) => update(i, { subtitle: e.target.value })}
+                  placeholder="Student 1 · Student 2"
+                />
+              </label>
+              <label>
+                Batch
+                <input
+                  value={row.batch}
+                  onChange={(e) => update(i, { batch: e.target.value })}
+                  placeholder="2026–27"
+                />
+              </label>
+              <label className="cms-placement-url">
+                Image URL
+                <input
+                  value={row.image}
+                  onChange={(e) => update(i, { image: e.target.value })}
+                  placeholder="Upload an image or paste a URL"
+                />
+              </label>
+              <label className="upload-control">
+                <UploadCloud size={14} />{" "}
+                {uploading ? "Uploading…" : "Upload placement photo"}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  hidden
+                  disabled={uploading}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file)
+                      upload(
+                        file,
+                        (url) => update(i, { image: url }),
+                        "sggs-tnp/placement-highlights",
+                      );
+                  }}
+                />
+              </label>
+            </div>
+            <button
+              className="icon-danger"
+              aria-label={`Delete ${row.title || "placement photo"}`}
+              onClick={() =>
+                setRows((current) => current.filter((_, j) => j !== i))
+              }
+            >
+              <Trash2 size={15} />
+            </button>
+          </article>
+        ))}
+        {!rows.length && (
+          <div className="cms-empty-state">
+            <ImagePlus size={24} />
+            <p>No placement photos yet.</p>
+            <button className="btn-secondary" onClick={add}>
+              <Plus size={14} /> Add first placement
+            </button>
+          </div>
+        )}
       </div>
     </EditorCard>
   );

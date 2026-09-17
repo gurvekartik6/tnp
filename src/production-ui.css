@@ -1,9 +1,7 @@
 /*
  * SGGS T&P production UI layer
  * -----------------------------
- * This file contains only final, scoped corrections for the public T&P
- * presentation layer. Legacy component styles remain untouched so existing
- * pages keep their visual language.
+ * Final scoped corrections for the public T&P presentation layer.
  */
 
 :root {
@@ -580,8 +578,8 @@ html.theme-dark .public-site .statistics-table-row-head {
 
 /* =========================================================
    RESPONSIVE HARDENING
-   Kept in one place so breakpoint overrides remain predictable.
    ========================================================= */
+
 html,
 body,
 #root {
@@ -750,5 +748,148 @@ textarea {
   .company-marquee-track,
   .animated-logo {
     animation-play-state: paused !important;
+  }
+}
+
+/* =========================================================
+   CMS PLACEMENT PHOTO EDITOR
+   ========================================================= */
+
+.cms-placement-list {
+  display: grid;
+  gap: 14px;
+}
+
+.cms-placement-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr) 28px;
+  gap: 16px;
+  align-items: start;
+  padding: 14px;
+  border: 1px solid var(--ui-border, #dfe8ef);
+  border-radius: 14px;
+  background: var(--ui-surface, #fff);
+}
+
+.cms-placement-preview {
+  height: 150px;
+  border-radius: 10px;
+  background: #f2f6fa;
+  border: 1px solid var(--ui-border, #dfe8ef);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: #91a3b5;
+}
+
+.cms-placement-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cms-placement-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cms-placement-fields label {
+  display: grid;
+  gap: 6px;
+  font-size: 9px;
+  font-weight: 800;
+  color: #536b82;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.cms-placement-fields input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #dce6ee;
+  border-radius: 8px;
+  padding: 10px 11px;
+  background: #fbfdff;
+  color: #173554;
+  font-size: 11px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.cms-placement-url {
+  grid-column: 1 / -1;
+}
+
+.cms-placement-card > .icon-danger {
+  margin-top: 4px;
+}
+
+.cms-empty-state {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  padding: 35px 15px;
+  border: 1px dashed var(--ui-border, #dfe8ef);
+  border-radius: 12px;
+  color: #7a8da0;
+  text-align: center;
+}
+
+.cms-empty-state p {
+  margin: 0;
+  font-size: 11px;
+}
+
+.theme-dark .cms-placement-card {
+  background: #0d1e2e;
+  border-color: #284258;
+}
+
+.theme-dark .cms-placement-preview {
+  background: #102437;
+  border-color: #29445b;
+}
+
+.theme-dark .cms-placement-fields label {
+  color: #9db2c6;
+}
+
+.theme-dark .cms-placement-fields input {
+  background: #102437;
+  border-color: #29445b;
+  color: #e8f2fb;
+}
+
+@media (max-width: 760px) {
+  .cms-placement-card {
+    grid-template-columns: 1fr;
+  }
+
+  .cms-placement-preview {
+    height: 210px;
+  }
+
+  .cms-placement-card > .icon-danger {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+  }
+
+  .cms-placement-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .cms-placement-url {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .cms-placement-preview {
+    height: 180px;
   }
 }
