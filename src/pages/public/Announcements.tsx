@@ -1,0 +1,6 @@
+import { Bell, Pin } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import ContentPage from '../../components/public/ContentPage';
+import { api } from '../../services/api';
+import { getPublicHomeContent, subscribeToPublicContent, type AnnouncementItem } from '../../services/siteContent';
+export default function Announcements(){const [items,setItems]=useState<AnnouncementItem[]>(()=>getPublicHomeContent().announcements);useEffect(()=>{api.announcements.list().then((x:AnnouncementItem[])=>setItems(x||[])).catch(()=>{});return subscribeToPublicContent(()=>setItems(getPublicHomeContent().announcements))},[]);return <ContentPage kicker="07A / ANNOUNCEMENTS" title="The latest from the Training & Placement Cell." intro="A publication-ready announcement stream controlled by the Dean." image="tnp.jpeg"><section className="announcement-list">{items.filter(x=>x.status!=='Draft').map((item,i)=><article key={item.id}><div className="announcement-icon">{i===0?<Pin/>:<Bell/>}</div><div><div className="announcement-meta"><span>{item.category}</span><small>{item.publishDate||'Published'}</small></div><h3>{item.title}</h3><p>{item.description}</p></div></article>)}{!items.length&&<div className="content-card"><h3>No announcements published yet.</h3><p>The Dean can publish the next notice from the admin workspace.</p></div>}</section></ContentPage>}
