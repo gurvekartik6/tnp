@@ -52,7 +52,6 @@ export default function PublicHeader() {
             <a href={`tel:${settings.phone.replace(/[^+0-9]/g, "")}`}><Phone size={13} /> {settings.phone}</a>
           </div>
           <div className="utility-right">
-            <span>Vishnupuri, Nanded, Maharashtra</span>
             <a className="old-website-link" href="https://tnpsggs.in/" target="_blank" rel="noreferrer">Old Website</a>
             <span className="utility-divider" />
             <div className="header-socials" aria-label="Official social links">
