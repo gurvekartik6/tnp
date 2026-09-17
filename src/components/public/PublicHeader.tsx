@@ -48,7 +48,7 @@ export default function PublicHeader() {
       <div className="header-utility">
         <div className="header-utility-inner">
           <div className="utility-contact">
-            <a href="https://www.sggs.ac.in/" target="_blank" rel="noreferrer" className="college-link"><span>Shri Guru Gobind Singhji Institute of Engineering &amp; Technology</span></a>
+            <a href="https://www.sggs.ac.in/" target="_blank" rel="noreferrer" className="college-link"><span>https://www.sggs.ac.in/</span></a>
             <a href={`tel:${settings.phone.replace(/[^+0-9]/g, "")}`}><Phone size={13} /> {settings.phone}</a>
           </div>
           <div className="utility-right">
