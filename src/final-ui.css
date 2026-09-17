@@ -1961,7 +1961,7 @@ body {
   display: flex;
   width: max-content;
   gap: 12px;
-  animation: sggs-logo-marquee 120s linear infinite;
+  animation: sggs-logo-marquee 180s linear infinite;
 }
 .company-marquee:hover .company-marquee-track {
   animation-play-state: paused;
